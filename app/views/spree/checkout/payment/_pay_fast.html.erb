@@ -1,0 +1,17 @@
+<input type="hidden" name="merchant_id" value="10020921">
+<input type="hidden" name="merchant_key" value="w4lrxhqt0q5o2">
+<input type="hidden" name="amount" value="47.99">
+<input type="hidden" name="item_name" value="Test Product">
+
+<input type="hidden" name="return_url" value="http://127.0.0.1:8000/checkout/confirm">
+<input type="hidden" name="cancel_url" value="http://www.example.com/cancel">
+<input type="hidden" name="notify_url" value="http://5666e74f17e9.ngrok.io/pay_fast/update">
+
+<input type="hidden" name="payment_method" value="mp">
+
+<input type="hidden" name="custom_int1" value="<%= @order.id %>">
+<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+
+
+<input type="submit" formaction="https://sandbox.payfast.co.za​/eng/process" method="post">

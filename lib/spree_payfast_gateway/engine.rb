@@ -16,7 +16,7 @@ module SpreePayfastGateway
         Rails.configuration.cache_classes ? require(c) : load(c)
       end
 
-      ::Rails.application.config.spree.payment_methods << Spree::Gateway::PayfastGateway
+      ::Rails.application.config.spree.payment_methods << Spree::Gateway::PayFast
       # Spree::PermittedAttributes.source_attributes << :payment_method_name
       # Spree::PermittedAttributes.source_attributes << :issuer
       # Spree::Api::ApiHelpers.payment_source_attributes << :payment_method_name
@@ -27,7 +27,7 @@ module SpreePayfastGateway
       # Spree::Config[:auto_capture_on_dispatch] = true
     end
 
-    # config.to_prepare &method(:activate).to_proc
+    config.to_prepare &method(:activate).to_proc
 
   end
 end
