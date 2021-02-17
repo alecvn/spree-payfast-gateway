@@ -3,7 +3,7 @@ $LOAD_PATH.unshift lib unless $LOAD_PATH.include?(lib)
 
 require 'spree_payfast_gateway/version'
 
-Gem::Specification.new do |s|
+Gem::Specification.new do |spec|
   spec.platform    = Gem::Platform::RUBY
   spec.name        = 'spree_payfast_gateway'
   spec.version     = SpreePayfastGateway::VERSION
