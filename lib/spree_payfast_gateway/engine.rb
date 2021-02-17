@@ -1,5 +1,5 @@
 module SpreePayfastGateway
-  module Engine
+  class Engine < ::Rails::Engine
     require 'spree/core'
 
     isolate_namespace SpreePayfastGateway
