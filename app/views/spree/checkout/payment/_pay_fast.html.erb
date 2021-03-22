@@ -1,17 +1,24 @@
-<input type="hidden" name="merchant_id" value="10020921">
-<input type="hidden" name="merchant_key" value="w4lrxhqt0q5o2">
-<input type="hidden" name="amount" value="47.99">
-<input type="hidden" name="item_name" value="Test Product">
+<input type="hidden" name="merchant_id" value="<%= payment_method.get_preference(:merchant_id) %>">
+<input type="hidden" name="merchant_key" value="<%= payment_method.get_preference(:merchant_key) %>">
+<input type="hidden" name="amount" value="<%= @order.total %>">
+<input type="hidden" name="item_name" value="<%= @order.number %>">
 
-<input type="hidden" name="return_url" value="http://127.0.0.1:8000/checkout/confirm">
-<input type="hidden" name="cancel_url" value="http://www.example.com/cancel">
-<input type="hidden" name="notify_url" value="http://5666e74f17e9.ngrok.io/pay_fast/update">
+<input type="hidden" name="return_url" value="<%= payment_method.get_preference(:return_url) %>">
+<input type="hidden" name="cancel_url" value="<%= payment_method.get_preference(:cancel_url) %>">
+<input type="hidden" name="notify_url" value="<%= payment_method.get_preference(:notify_url) %>">
 
-<input type="hidden" name="payment_method" value="mp">
+<select name="payment_method" id="payment_method">
+    <% Spree::Gateway::PayFast::OPTIONS.each do |key, value| %>
+	<option value="<%= value %>"><%= key %></option>
+    <% end %>
+</select>
 
-<input type="hidden" name="custom_int1" value="<%= @order.id %>">
+<input type="hidden" name="custom_int1" value="<%= payment_method.id %>">
 <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 
-
-
-<input type="submit" formaction="https://sandbox.payfast.co.za​/eng/process" method="post">
+<script>
+ (function() {
+     var form = document.getElementById("checkout_form_payment");
+     form.action = "<%= payment_method.get_preference(:payfast_test_api) %>";
+ })();
+</script>

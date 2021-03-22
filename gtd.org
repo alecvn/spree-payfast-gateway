@@ -1,0 +1,4 @@
+* Roadmap
+** implement different payment methods (cc, dc, eft, snapscan etc) as different payment sources as in Mollie
+
+

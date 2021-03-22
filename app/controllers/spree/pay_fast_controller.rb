@@ -1,4 +1,4 @@
-class Spree::PayFastController < Spree::BaseController
+class Spree::PayFastController < Spree::BaseController # StoreController
 
   protect_from_forgery except: :update
 
@@ -32,18 +32,28 @@ class Spree::PayFastController < Spree::BaseController
   #   "state"=>"payment"
   # }
   def update
-    order = Spree::Order.find(params[:custom_int1])
+    order = Spree::Order.find_by(number: params[:item_name]) # current_order
+    payment_method = Spree::PaymentMethod.where(type: "Spree::Gateway::PayFast", active: true).first
 
-    if payment_params_valid? && paying_with_payfast?
-      if order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
-        order.payments.create!(amount: params[:amount_gross], payment_method_id: 7, state: 'completed')
-        order.reload
-        order.next
+    if params[:payment_status] == "COMPLETE"
+      order.payments.create!(
+        source: Spree::PayFastPaymentSource.create(
+          pf_payment_id: params[:pf_payment_id],
+          name: params[:custom_str1], # maybe when we use actual payfast endpoint the payment method will come through the post
+          fee: params[:amount_fee],
+          signature: params[:signature],
+          payment_method_id: payment_method.id
+        ),
+        amount: params[:amount_gross],
+        payment_method_id: Spree::PaymentMethod.find(payment_method_id_param),
+        state: 'completed'
+      )
+      order.reload
+      order.next
 
-        head :ok
-      else
-        head :bad_request
-      end
+      head :ok
+    else
+      head :bad_request
     end
   end
 
@@ -53,7 +63,7 @@ class Spree::PayFastController < Spree::BaseController
   private
 
   def payment_method_id_param
-    params[:order][:payments_attributes].first[:payment_method_id]
+    params[:custom_int1]
   end
 
   def paying_with_payfast?
